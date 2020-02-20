@@ -19,6 +19,7 @@
 #include "FingerprintInscreen.h"
 
 #include <android-base/logging.h>
+#include <android-base/properties.h>
 #include <hardware_legacy/power.h>
 
 #include <fstream>
@@ -35,6 +36,10 @@
 #define FOD_STATUS_PATH "/sys/devices/virtual/touch/tp_dev/fod_status"
 #define FOD_STATUS_ON 1
 #define FOD_STATUS_OFF 0
+
+#define FOD_SENSOR_X 455
+#define FOD_SENSOR_Y 1910
+#define FOD_SENSOR_SIZE 190
 
 #define FOD_ERROR 8
 #define FOD_ERROR_VENDOR 6
@@ -61,20 +66,61 @@ static void set(const std::string& path, const T& value) {
     file << value;
 }
 
+using ::android::base::GetProperty;
+
 FingerprintInscreen::FingerprintInscreen() {
     xiaomiFingerprintService = IXiaomiFingerprint::getService();
 }
 
 Return<int32_t> FingerprintInscreen::getPositionX() {
-    return 455;
+    int result;
+    std::string vOff = GetProperty(propFODOffset, "");
+
+    if (vOff.length() < 3) {
+        return FOD_SENSOR_X;
+    }
+
+    result = std::stoi(vOff.substr(0, vOff.find(",")));
+    if (result < 1) {
+        return FOD_SENSOR_X;
+    }
+
+    return result;
 }
 
 Return<int32_t> FingerprintInscreen::getPositionY() {
-    return 1910;
+    int result;
+    std::string vOff = GetProperty(propFODOffset, "");
+
+    if (vOff.length() < 3) {
+        return FOD_SENSOR_Y;
+    }
+
+    result = std::stoi(vOff.substr(vOff.find(",") + 1));
+    if (result < 1) {
+        return FOD_SENSOR_Y;
+    }
+
+    return result;
 }
 
 Return<int32_t> FingerprintInscreen::getSize() {
-    return 190;
+    int result, propW, propH;
+    std::string vSize = GetProperty(propFODSize, "");
+
+    if (vSize.length() < 7) {
+        return FOD_SENSOR_SIZE;
+    }
+
+    propW = std::stoi(vSize.substr(0, vSize.find(",")));
+    propH = std::stoi(vSize.substr(vSize.find(",") +1));
+
+    result = fmax(propW, propH);
+    if (result < 1) {
+        return FOD_SENSOR_SIZE;
+    }
+    
+    return result;
 }
 
 Return<void> FingerprintInscreen::onStartEnroll() {
