@@ -327,6 +327,10 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
+# Wallpapers
+PRODUCT_PACKAGES += \
+    PixelLiveWallpaperPrebuilt
+
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power@1.3-service.xiaomi-libperfmgr \
