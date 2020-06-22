@@ -106,3 +106,5 @@ ro.adb.secure=0
 ro.secure=0
 ro.debuggable=1
 
+# Seamless transfer
+sys.fflag.override.settings_seamless_transfer=true
