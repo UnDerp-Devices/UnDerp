@@ -1197,4 +1197,7 @@
     <!-- Enable pocket mode -->
     <bool name="config_proxiSensorWakupCheck">true</bool> 
 
+    <!-- FOD Icon Dimming -->
+    <bool name="config_targetUsesInKernelDimming">false</bool>
+
 </resources>
