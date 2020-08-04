@@ -218,6 +218,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     XiaomiParts
 
+# Device Personalization Services
+PRODUCT_PACKAGES += \
+    MatchmakerPrebuilt
+
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio@2.0-service \
